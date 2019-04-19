@@ -1,0 +1,10 @@
+https://developer.android.com/studio#downloads 
+(scroll down to download sdk tools)
+
+__________________________________________________________
+
+For Vuforia, it should be installed alongwith Unity itself.
+Afer that, download the sdk for Vuforia for Windows:
+
+https://developer.vuforia.com/downloads/sdk
+(download for UWP)
