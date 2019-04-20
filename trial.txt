@@ -1,0 +1,28 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(17, GPIO.OUT)
+GPIO.setup(27, GPIO.OUT)
+
+p1 = GPIO.PWM(17, 50)
+p2 = GPIO.PWM(27, 50)
+
+p1.start(7.5)
+p2.start(7.5)
+
+try:
+    while True:
+        p1.ChangeDutyCycle(2.5)  # turn towards 90 degree
+        time.sleep(1) # sleep 1 second
+        p1.ChangeDutyCycle(4.5)  # turn towards 0 degree
+        time.sleep(1) # sleep 1 second
+        p2.ChangeDutyCycle(2.5)  # turn towards 90 degree
+        time.sleep(1) # sleep 1 second
+        p2.ChangeDutyCycle(5.5)  # turn towards 0 degree
+        time.sleep(1) # sleep 1 second
+except KeyboardInterrupt:
+    p1.stop()
+    p2.stop()
+    GPIO.cleanup()

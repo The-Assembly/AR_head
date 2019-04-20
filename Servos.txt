@@ -1,0 +1,55 @@
+import socket                                                       
+import RPi.GPIO as GPIO                                             
+import time 
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17,GPIO.OUT)
+GPIO.setup(27,GPIO.OUT)
+	
+servo1=GPIO.PWM(17,50)
+servo1.start(3.5)
+servo2=GPIO.PWM(27,50)
+servo2.start(4)
+
+while True:    
+        store = []
+        backlog=1
+        size = 1024
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("10.4.36.166",50001))#IMPORTANT: change the ip address to match the one printed on the back of the raspberry pi
+        s.listen(backlog)
+        try:
+            print ( "Waiting...")
+            client, address = s.accept()
+            
+            print ( "Received Data :")
+            while True:
+                data = client.recv(size)
+                if data:
+                    tabela = data.decode('ascii')
+                    print (tabela)
+#                    print(data)
+                    client.send(data)
+                    if tabela == "Up":
+                        servo1.ChangeDutyCycle(3.5)                                                            
+                        time.sleep(1)
+                    elif tabela == "Down":
+                        servo1.ChangeDutyCycle(4.5)
+                        time.sleep(1)
+                    elif tabela == "Right":
+                        servo2.ChangeDutyCycle(4)
+                        time.sleep(1)
+                    elif tabela == "Left":
+                        servo2.ChangeDutyCycle(2.5)
+                        time.sleep(1)
+                    
+        except Exception as e:
+            servo1.stop()
+            servo2.stop()
+            print(e)
+            print("closing socket")
+            client.close()
+            s.close()
